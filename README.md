@@ -14,4 +14,3 @@ Steps / workfflow :-
 2. installing tailwind css
 3. navbar component 
 4. Manager Component 
- last work - creating ui - 29min
