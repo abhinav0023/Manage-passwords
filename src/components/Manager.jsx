@@ -5,6 +5,7 @@ import eyeHide from "../assets/images/eye-24.png";
 
 const Manager = () => {
   const imageRef = useRef();
+  const passwordRef = useRef();
   const [form, setForm] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([]);
 
@@ -20,10 +21,14 @@ const Manager = () => {
   };
 
   const showPassword = () => {
+    passwordRef.current.type = "text";
     if (imageRef.current.src.includes(eyeOpen)) {
       imageRef.current.src = eyeHide;
+      passwordRef.current.type = "password";
+
     } else {
       imageRef.current.src = eyeOpen;
+      passwordRef.current.type = "text";
     }
   };
 
@@ -67,11 +72,12 @@ const Manager = () => {
               />
               <div className="relative w-full">
                 <input
+                  ref={passwordRef}
                   onChange={handleChange}
                   value={form.password}
                   placeholder="website password"
                   className="w-full p-3 rounded-full border border-white bg-black font-serif"
-                  type="text"
+                  type="password"
                   name="password"
                 />
                 <span
