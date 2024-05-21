@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import addUser from "../assets/images/add-user.png";
 import eyeOpen from "../assets/images/eye-3-24.png";
 import eyeHide from "../assets/images/eye-24.png";
-
+import copyBtn from "../assets/images/copy.png";
 const Manager = () => {
   const imageRef = useRef();
   const passwordRef = useRef();
@@ -25,12 +25,16 @@ const Manager = () => {
     if (imageRef.current.src.includes(eyeOpen)) {
       imageRef.current.src = eyeHide;
       passwordRef.current.type = "password";
-
     } else {
       imageRef.current.src = eyeOpen;
       passwordRef.current.type = "text";
     }
   };
+
+  const copyText = (text) => {
+    alert(text + "is copied to clipboard");
+    navigator.clipboard.writeText(text);
+  }
 
   const savePassword = () => {
     console.log(form);
@@ -103,7 +107,7 @@ const Manager = () => {
             )}
             {passwordArray.length !== 0 && (
               <table className="rounded-md overflow-hidden table-auto w-full text-white">
-                <thead className="bg-green-600">
+                <thead className="bg-blue-300 text-black">
                   <tr>
                     <th className="py-2">Site</th>
                     <th className="py-2">Username</th>
@@ -113,15 +117,25 @@ const Manager = () => {
                 <tbody>
                   {passwordArray.map((item, index) => {
                     return (
-                      <tr key={index}>
-                        <td className="py-2 text-center w-32 text-white">
-                          {item.site}
+                      <tr
+                        key={index}
+                        className="border-b-2 border-b-slate-800 "
+                      >
+                        <td className="border-r-2 border-r-slate-600 py-2 text-center w-32 text-white">
+                          <a href={item.site} target="_blank">
+                            {item.site}
+                          </a>
                         </td>
-                        <td className="py-2 text-center w-32 text-white">
+                        <td className="border-r-2 border-r-slate-600 py-2 text-center w-32 text-white">
                           {item.username}
                         </td>
-                        <td className="py-2 text-center w-32 text-white">
+                        <td className=" py-2 text-center w-32 text-white">
+                          <div className="flex items-center justify-center">
                           {item.password}
+                          <div className="px-3 cursor-pointer" onClick={()=>{copyText(item.password)}} >
+                            <img className="invert" width={20} src={copyBtn} alt="Copy" />
+                          </div>
+                          </div>
                         </td>
                       </tr>
                     );
