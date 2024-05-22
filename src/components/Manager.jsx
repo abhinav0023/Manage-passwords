@@ -39,24 +39,30 @@ const Manager = () => {
     navigator.clipboard.writeText(text);
     toast("Copied to clipboard", {
       position: "top-right",
-      autoClose: 2000,
+      autoClose: 1000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true,
       progress: undefined,
-      theme: "light",
+      theme: "dark",
     });
   };
 
   const savePassword = () => {
-    console.log(form);
-    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
-    localStorage.setItem(
-      "passwords",
-      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
-    );
-    setForm({ site: "", username: "", password: "" })
+    if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
+
+      console.log(form);
+      setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+      localStorage.setItem(
+        "passwords",
+        JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+      );
+      setForm({ site: "", username: "", password: "" })
+    }
+    else{
+      alert("not saved")
+    }
   };
 
   const deletePassword = (id) => {
@@ -79,11 +85,11 @@ const Manager = () => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
-        rtl={false}
+        rtl={true}
         pauseOnFocusLoss
         draggable
         pauseOnHover
@@ -92,7 +98,7 @@ const Manager = () => {
       <ToastContainer />
       {/* Background container that covers the entire viewport height */}
       <div className="min-h-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
-        <div className="mycontainer">
+        <div className="md:mycontainer">
           <div className="headingLogo flex flex-col items-center">
             <h1 className="text-white font-mono font-bold text-3xl">
               PASSWORD MANAGER
@@ -101,7 +107,7 @@ const Manager = () => {
               Securely store and manage your passwords
             </p>
           </div>
-          <div className="font-serif items-center text-white flex flex-col p-4">
+          <div className="font-serif items-center text-white flex flex-col md:flex-col p-4">
             <input
               value={form.site}
               onChange={handleChange}
@@ -128,12 +134,13 @@ const Manager = () => {
                   className="w-full p-3 rounded-full border border-white bg-black font-serif"
                   type="password"
                   name="password"
+                  id="password"
                 />
                 <span
                   className="absolute right-0 top-1 p-2 cursor-pointer"
                   onClick={showPassword}
                 >
-                  <img ref={imageRef} src={eyeOpen} width={30} alt="Show" />
+                  <img ref={imageRef} src={eyeHide} width={30} alt="Show" />
                 </span>
               </div>
             </div>
@@ -151,7 +158,7 @@ const Manager = () => {
               <div className="text-white">No passwords available</div>
             )}
             {passwordArray.length !== 0 && (
-              <table className="rounded-md overflow-hidden table-auto w-full text-white">
+              <table className="md:mycontainer rounded-md overflow-hidden table-auto w-full text-white">
                 <thead className="bg-blue-300 text-black ">
                   <tr>
                     <th className="py-2">Site</th>
