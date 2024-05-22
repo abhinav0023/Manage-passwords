@@ -3,6 +3,10 @@ import addUser from "../assets/images/add-user.png";
 import eyeOpen from "../assets/images/eye-3-24.png";
 import eyeHide from "../assets/images/eye-24.png";
 import copyBtn from "../assets/images/copy.png";
+import { ToastContainer, toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+import "react-toastify/dist/ReactToastify.css";
+
 const Manager = () => {
   const imageRef = useRef();
   const passwordRef = useRef();
@@ -32,19 +36,60 @@ const Manager = () => {
   };
 
   const copyText = (text) => {
-    alert(text + "is copied to clipboard");
     navigator.clipboard.writeText(text);
-  }
+    toast("Copied to clipboard", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   const savePassword = () => {
     console.log(form);
-    setPasswordArray([...passwordArray, form]);
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
-    console.log(passwordArray);
+    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+    localStorage.setItem(
+      "passwords",
+      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    );
+    setForm({ site: "", username: "", password: "" })
+  };
+
+  const deletePassword = (id) => {
+    console.log("deleting password with id : ", id);
+    setPasswordArray(passwordArray.filter((item) => item.id !== id));
+    localStorage.setItem(
+      "passwords",
+      JSON.stringify(passwordArray.filter((item) => item.id !== id))
+    );
+  };
+  const editPassword = (id) => {
+    console.log("editing password with id : ", id);
+    setForm(passwordArray.filter((item) => item.id === id)[0]);
+
+    setPasswordArray(passwordArray.filter((item) => item.id !== id));
+    // localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
       {/* Background container that covers the entire viewport height */}
       <div className="min-h-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
         <div className="mycontainer">
@@ -97,7 +142,7 @@ const Manager = () => {
               className="border border-black flex gap-2 bg-slate-200 font-mono hover:bg-blue-700 text-black hover:text-white font-bold px-4 rounded shadow sm:py-3 sm:px-6"
             >
               <img src={addUser} width={20} alt="+" />
-              Add Passwords
+              Save Password
             </button>
           </div>
           <div className="passwords mt-4">
@@ -107,11 +152,12 @@ const Manager = () => {
             )}
             {passwordArray.length !== 0 && (
               <table className="rounded-md overflow-hidden table-auto w-full text-white">
-                <thead className="bg-blue-300 text-black">
+                <thead className="bg-blue-300 text-black ">
                   <tr>
                     <th className="py-2">Site</th>
                     <th className="py-2">Username</th>
                     <th className="py-2">Passwords</th>
+                    <th className="py-2">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -129,13 +175,49 @@ const Manager = () => {
                         <td className="border-r-2 border-r-slate-600 py-2 text-center w-32 text-white">
                           {item.username}
                         </td>
-                        <td className=" py-2 text-center w-32 text-white">
+                        <td className="border-r-2 border-r-slate-600 py-2 text-center w-32 text-white">
                           <div className="flex items-center justify-center">
-                          {item.password}
-                          <div className="px-3 cursor-pointer" onClick={()=>{copyText(item.password)}} >
-                            <img className="invert" width={20} src={copyBtn} alt="Copy" />
+                            {item.password}
+                            <div
+                              className="px-3 cursor-pointer"
+                              onClick={() => {
+                                copyText(item.password);
+                              }}
+                            >
+                              <img
+                                className="invert"
+                                width={20}
+                                src={copyBtn}
+                                alt="Copy"
+                              />
+                            </div>
                           </div>
-                          </div>
+                        </td>
+                        <td className=" py-2 text-center w-32 text-white">
+                          <span
+                            className="invert"
+                            onClick={() => {
+                              editPassword(item.id);
+                            }}
+                          >
+                            <lord-icon
+                              src="https://cdn.lordicon.com/ifsxxxte.json"
+                              trigger="hover"
+                              style={{ width: "25px", height: "25px" }}
+                            ></lord-icon>
+                          </span>
+                          <span
+                            className="invert"
+                            onClick={() => {
+                              deletePassword(item.id);
+                            }}
+                          >
+                            <lord-icon
+                              src="https://cdn.lordicon.com/skkahier.json"
+                              trigger="hover"
+                              style={{ width: "25px", height: "25px" }}
+                            ></lord-icon>
+                          </span>
                         </td>
                       </tr>
                     );
