@@ -24,14 +24,9 @@ const Navbar = () => {
         </div>
         
         {/* Button section */}
-        <div className='flex gap-4'>
-          {/* Sign In button with styling and hover effect */}
-          <button className='bg-blue-900 border hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
-            Sign In
-          </button>
-          {/* Register button with different styling and hover effect */}
-          <button className='bg-slate-950 border hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>
-            Register
+        <div className='flex px-6'>
+          <button className=' bg-slate-950 border hover:bg-green-700 text-white font-bold py-2 px-3 rounded'>
+             <a href="https://github.com/abhinav0023/Mind-Match" target='_blank'>Github</a>
           </button>
         </div>
       </div>
